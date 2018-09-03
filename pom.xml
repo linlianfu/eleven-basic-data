@@ -12,6 +12,8 @@
         <module>eleven-basic-data-webapp</module>
         <module>eleven-basic-data-user-south-api</module>
         <module>eleven-basic-data-user-south</module>
+        <module>eleven-basic-rocketmq</module>
+        <module>eleven-basic-data-rocketmq-client</module>
     </modules>
     <properties>
         <slf4j_version>1.7.6</slf4j_version>
