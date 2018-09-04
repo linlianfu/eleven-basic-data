@@ -233,6 +233,7 @@
             </plugin>
         </plugins>
         <resources>
+            <!--可在子模块自定义打包规则,子模块无定义,则按照顶级模块规则-->
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
@@ -245,11 +246,11 @@
             而xml文件包括mybatis文件，mybatis会扫描对应的包下的dto，导致引用该包的消费端包也必须要
             有同样的dto，否则会报类找不到的异常-->
             <resource>
-            <directory>src/main/resources</directory>
-            <includes>
-            <include>**/*</include>
-            </includes>
-            <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                    <includes>
+                      <include>**/*</include>
+                    </includes>
+                <filtering>true</filtering>
             </resource>
         </resources>
     </build>

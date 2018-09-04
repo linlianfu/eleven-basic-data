@@ -1,7 +1,9 @@
 package cn.eleven.basic.data.rocketmq.client.consumer;
 
+import com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer;
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import com.alibaba.rocketmq.common.MixAll;
 import com.alibaba.rocketmq.common.consumer.ConsumeFromWhere;
 import com.alibaba.rocketmq.common.message.Message;
 import lombok.Setter;
@@ -17,7 +19,7 @@ import java.io.Serializable;
  * @description: 默认的mq消费者
  */
 @Slf4j
-public class DefaultMQPushConsumer implements Serializable,DisposableBean,InitializingBean {
+public class DefaultMQConsumer implements Serializable,DisposableBean,InitializingBean {
     /**
      * broker地址
      */
@@ -32,6 +34,7 @@ public class DefaultMQPushConsumer implements Serializable,DisposableBean,Initia
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        log.info("mq默认消费者初始化");
         startMessageListener();
 
     }
@@ -41,8 +44,8 @@ public class DefaultMQPushConsumer implements Serializable,DisposableBean,Initia
 
         log.info(">>>>>基础数据服务启动消息消费监听。。。。。");
 
-        com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer consumer =
-                new com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer(consumerGroup);
+        DefaultMQPushConsumer consumer =
+                new DefaultMQPushConsumer(MixAll.DEFAULT_CONSUMER_GROUP);
         consumer.setNamesrvAddr(namesrvAddr);
         try {
             //订阅PushTopic下Tag为push的消息
