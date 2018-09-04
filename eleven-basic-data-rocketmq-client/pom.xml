@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>eleven-basic-data-rocketmq-client</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.alibaba.rocketmq/rocketmq-client -->
@@ -31,4 +32,7 @@
             <version>3.5.9</version>
         </dependency>
     </dependencies>
+    <build>
+        <finalName>eleven-basic-data-rocketmq-client</finalName>
+    </build>
 </project>
