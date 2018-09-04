@@ -24,7 +24,7 @@ public class UserInfoAction {
 
     @RequestMapping("listBase")
     public List<UserBaseDto> listBase(UserQuery query){
-        log.info("111111111");
+        log.info("111 111 111");
         return service.listBase(query);
     }
 }
