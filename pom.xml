@@ -208,7 +208,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>cn-eleven-basic-data</finalName>
+        <finalName>eleven-basic-data</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
