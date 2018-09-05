@@ -1,5 +1,6 @@
 package cn.eleven.basic.data.rocketmq.client.producer;
 
+import cn.eleven.basic.data.rocketmq.client.dto.MQMessage;
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.alibaba.rocketmq.client.producer.SendResult;
 import com.alibaba.rocketmq.client.producer.SendStatus;
@@ -39,7 +40,7 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
     }
 
 
-    public SendStatus sendMessage(byte[] messageBody){
+    public SendStatus sendMessage(MQMessage message){
         log.info(">>>>>开始发送消息。。。。");
         DefaultMQProducer producer = new DefaultMQProducer(MixAll.DEFAULT_CONSUMER_GROUP);
         producer.setNamesrvAddr(namesrvAddr);
@@ -48,7 +49,7 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
 
             Message msg = new Message(topic,
                     tags,
-                    messageBody);
+                    message.getBody().getBytes());
             SendResult result = producer.send(msg);
             log.info("id【{}】,result【{}】，context【{}】",result.getMsgId(),result.getSendStatus(),new String(msg.getBody()));
             log.info(">>>>>消息发送结束.....");

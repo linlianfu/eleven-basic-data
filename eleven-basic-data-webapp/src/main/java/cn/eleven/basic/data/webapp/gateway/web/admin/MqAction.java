@@ -1,6 +1,7 @@
 package cn.eleven.basic.data.webapp.gateway.web.admin;
 
 import cn.eleven.basic.data.rocketmq.client.consumer.DefaultMQConsumer;
+import cn.eleven.basic.data.rocketmq.client.dto.MQMessage;
 import cn.eleven.basic.data.rocketmq.client.producer.ProducerFactory;
 import cn.eleven.basic.data.user.south.api.dto.UserBaseDto;
 import com.alibaba.rocketmq.client.producer.SendStatus;
@@ -38,7 +39,8 @@ public class MqAction {
         userBaseDto.setGrade(6);
         userBaseDto.setPhone("123456789");
         userBaseDto.setAddress("福建省福州市鼓楼区工业路611号海峡技术转移中心");
-        return producerFactory.sendMessage(userBaseDto.toString().getBytes());
+        MQMessage message = new MQMessage(userBaseDto.toString());
+        return producerFactory.sendMessage(message);
     }
 
 
