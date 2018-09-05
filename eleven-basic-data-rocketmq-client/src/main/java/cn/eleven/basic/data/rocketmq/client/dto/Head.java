@@ -24,4 +24,5 @@ public class Head implements Serializable{
      * 发送时间
      */
     private Date sendTime;
+
 }

@@ -40,6 +40,9 @@ public class MqAction {
         userBaseDto.setPhone("123456789");
         userBaseDto.setAddress("福建省福州市鼓楼区工业路611号海峡技术转移中心");
         MQMessage message = new MQMessage(userBaseDto.toString());
+        message.setFrom("基础数据服务");
+        message.setTo("计划发送给平台");
+        //发送给平台接受
         return producerFactory.sendMessage(message);
     }
 

@@ -3,6 +3,7 @@ package cn.eleven.basic.data.rocketmq.client.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author: eleven
@@ -25,11 +26,14 @@ public class MQMessage implements Serializable {
         this.body = body;
     }
 
-    private void setFrom(String from){
+    public void setFrom(String from){
         head.setFrom(from);
     }
-    private void setTo(String to){
-        head.setFrom(to);
+    public void setTo(String to){
+        head.setTo(to);
+    }
+    public void setSendTime(){
+        head.setSendTime(new Date());
     }
 
 }

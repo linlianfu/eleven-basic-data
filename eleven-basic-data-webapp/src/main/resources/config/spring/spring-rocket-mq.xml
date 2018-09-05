@@ -6,13 +6,11 @@
 
     <bean id="producerFactory" class="cn.eleven.basic.data.rocketmq.client.producer.ProducerFactory">
         <property name="namesrvAddr" value="127.0.0.1:9876"/>
-        <property name="topic" value="produceTopic"/>
-        <property name="tags" value="eleven"/>
+        <property name="topic" value="ability-eleven-basic-data-send"/>
     </bean>
     <bean id="defaultMQConsumer" class="cn.eleven.basic.data.rocketmq.client.consumer.DefaultMQConsumer">
         <property name="namesrvAddr" value="127.0.0.1:9876"/>
-        <property name="topic" value="produceTopic"/>
-        <property name="subExpression" value="eleven"/>
+        <property name="topic" value="ability-eleven-basic-data-receive"/>
     </bean>
 
 </beans>
