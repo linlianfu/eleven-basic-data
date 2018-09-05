@@ -9,6 +9,7 @@
 
     <import resource="classpath:/config/spring/spring-sys-properties.xml"/>
     <import resource="classpath:/config/spring/spring-annotation.xml"/>
+    <import resource="classpath:/config/spring/spring-rocket-mq.xml"/>
     <import resource="classpath:/config/spring/spring-dubbo.xml"/>
     <import resource="classpath:/config/spring/spring-dubbo-provider.xml"/>
 

@@ -32,6 +32,11 @@
             <artifactId>eleven-basic-data-user-south</artifactId>
         </dependency>
         <dependency>
+            <groupId>cn.eleven</groupId>
+            <artifactId>eleven-basic-data-rocketmq-client</artifactId>
+            <version>${eleven-basci-data}</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>

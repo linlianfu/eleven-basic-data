@@ -18,9 +18,9 @@ public class UserQueryServiceImpl implements IUserQueryService {
     @Override
     public List<UserBaseDto> listBase(UserQuery query) {
         List<UserBaseDto> result = new ArrayList<>();
-        result.add(new UserBaseDto("小林"));
-        result.add(new UserBaseDto("小红"));
-        result.add(new UserBaseDto("小清"));
+        result.add(new UserBaseDto("小林",2,"福州市","110"));
+        result.add(new UserBaseDto("小红",2,"福州市","110"));
+        result.add(new UserBaseDto("小清",2,"福州市","110"));
         return result;
     }
 }
