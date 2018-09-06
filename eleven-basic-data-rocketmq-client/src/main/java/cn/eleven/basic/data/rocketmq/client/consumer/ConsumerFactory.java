@@ -15,10 +15,13 @@ import java.io.Serializable;
 /**
  * @author: eleven
  * @date: 2018/9/3 22:37
- * @description: 默认的mq消费者
+ * @description: 消费者工厂类
+ *  1.注册监听，通过查找系统下的所有订阅的topic，逐个注册监听；
+ *  注意：一个topic下可能存在多个topic，则考虑是否逐个注册监听
+ *  2.消费回调
  */
 @Slf4j
-public class DefaultMQConsumer implements Serializable,DisposableBean,InitializingBean {
+public class ConsumerFactory implements Serializable,DisposableBean,InitializingBean {
     /**
      * broker地址
      */

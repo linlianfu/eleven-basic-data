@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.alibaba.rocketmq.client.producer.SendResult;
 import com.alibaba.rocketmq.client.producer.SendStatus;
-import com.alibaba.rocketmq.common.MixAll;
 import com.alibaba.rocketmq.common.message.Message;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,9 @@ import java.io.Serializable;
 /**
  * @author: eleven
  * @date: 2018/9/4 21:19
- * @description:  MQ生产者
+ * @description:  MQ生产者工厂
+ * 1.获取指定topic下的所有tag，当没有指定发送那个tag时，默认发送到所有tag
+ * 2.
  */
 @Slf4j
 public class ProducerFactory implements DisposableBean,InitializingBean ,Serializable{
@@ -43,7 +44,7 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
 
     public SendStatus sendMessage(MQMessage message){
         log.info(">>>>>开始发送消息,topic:{},tags:{}",topic,tags);
-        DefaultMQProducer producer = new DefaultMQProducer(MixAll.DEFAULT_CONSUMER_GROUP);
+        DefaultMQProducer producer = new DefaultMQProducer(producerGroup);
         producer.setNamesrvAddr(namesrvAddr);
         try {
             producer.start();

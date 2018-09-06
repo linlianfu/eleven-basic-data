@@ -1,15 +1,15 @@
 package cn.eleven.basic.data.webapp.gateway.web.admin;
 
-import cn.eleven.basic.data.rocketmq.client.consumer.DefaultMQConsumer;
 import cn.eleven.basic.data.rocketmq.client.dto.MQMessage;
 import cn.eleven.basic.data.rocketmq.client.producer.ProducerFactory;
 import cn.eleven.basic.data.user.south.api.dto.UserBaseDto;
 import com.alibaba.rocketmq.client.producer.SendStatus;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 
 /**
@@ -22,11 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("mqTest")
 public class MqAction {
 
-    @Autowired
+    @Resource(name = "producerFactory")
     ProducerFactory producerFactory;
 
-    @Autowired
-    DefaultMQConsumer consumer;
     /**
      * 测试消息生产
      * @return
