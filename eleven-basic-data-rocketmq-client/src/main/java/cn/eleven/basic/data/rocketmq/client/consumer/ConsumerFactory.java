@@ -66,8 +66,8 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
 
     public MessageListenerConcurrently getRegisterMessageListener(){
         return (msgs, context) -> {
-            log.info(">>>>>成功接收消息，开始消费。。。。。");
             Message msg = msgs.get(0);
+            log.info(">>>>>成功接收消息，来源topic:{},tags:{}",msg.getTopic(),msg.getTags());
             log.info("接收到的消息：【{}】",new String(msg.getBody()));
             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
         };
