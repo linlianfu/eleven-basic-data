@@ -219,6 +219,8 @@
                 </configuration>
             </plugin>
             <plugin>
+                <!--如果没有配置此插件，则打包生成的jar包没有源码包-->
+                <!--引入改包的地方看不到源码，只能看到class文件-->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.0.1</version>
@@ -245,6 +247,8 @@
             <!--压包的时候，千万将xml的文件一起压包，否则会造成spring扫描的时候会扫描对应xml文件
             而xml文件包括mybatis文件，mybatis会扫描对应的包下的dto，导致引用该包的消费端包也必须要
             有同样的dto，否则会报类找不到的异常-->
+            <!--使用多模块已经解决此问题，多模块开发，客户端只需要引入API包，
+            API包没有只提供接口，没有xml文件-->
             <resource>
                 <directory>src/main/resources</directory>
                     <includes>
