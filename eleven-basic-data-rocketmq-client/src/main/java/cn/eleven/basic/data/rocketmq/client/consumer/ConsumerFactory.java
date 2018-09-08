@@ -11,6 +11,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author: eleven
@@ -32,25 +33,26 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
     @Setter
     private String topic;
     @Setter
+    private List<String> topicList;
+    @Setter
     private String subExpression;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        log.info("mq默认消费者初始化");
+        log.info("mq消费者初始化");
         startMessageListener();
-
     }
 
 
     public boolean startMessageListener(){
 
         log.info(">>>>>基础数据服务启动消息消费监听。。。。。");
-
+        log.info(">topicList:{}",topicList);
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("PushConsumer");
         consumer.setNamesrvAddr(namesrvAddr);
         try {
             //订阅PushTopic下Tag为push的消息
-            log.info("消费者启动订阅关系，订阅topic:{}.subExpression:{}",topic,subExpression);
+            log.info("消费者启动订阅关系，订阅topic:【{}】,subExpression:【{}】",topic,subExpression);
             consumer.subscribe(topic, subExpression);
             //程序第一次启动从消息队列头取数据
             consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);

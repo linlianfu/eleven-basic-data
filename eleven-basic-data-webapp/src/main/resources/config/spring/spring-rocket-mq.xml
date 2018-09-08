@@ -14,5 +14,6 @@
         <property name="namesrvAddr" value="127.0.0.1:9876"/>
         <property name="topic" value="ability-eleven-basic-data-send"/>
         <property name="subExpression" value="ability"/>
+        <property name="topicList" value="ability-eleven-basic-data-send,ability-eleven-basic-data-receive"/>
     </bean>
 </beans>
