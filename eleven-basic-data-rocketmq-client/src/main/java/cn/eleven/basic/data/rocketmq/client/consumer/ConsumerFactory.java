@@ -12,6 +12,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: eleven
@@ -33,9 +34,9 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
     @Setter
     private String topic;
     @Setter
-    private List<String> topicList;
-    @Setter
     private String subExpression;
+    @Setter
+    private Map<String,List<String>> topicTagMap;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -47,7 +48,7 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
     public boolean startMessageListener(){
 
         log.info(">>>>>基础数据服务启动消息消费监听。。。。。");
-        log.info(">topicList:{}",topicList);
+        log.info(">topicList:{}",topicTagMap);
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("PushConsumer");
         consumer.setNamesrvAddr(namesrvAddr);
         try {
