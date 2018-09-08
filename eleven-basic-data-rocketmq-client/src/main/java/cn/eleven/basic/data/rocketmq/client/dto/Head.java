@@ -21,6 +21,14 @@ public class Head implements Serializable{
      */
     private String to;
     /**
+     * topic
+     */
+    private String topic;
+    /**
+     * tags
+     */
+    private String tags;
+    /**
      * 发送时间
      */
     private Date sendTime;

@@ -1,9 +1,9 @@
 package cn.eleven.basic.data.rocketmq.client.dto;
 
+import cn.eleven.common.date.DateUtil;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author: eleven
@@ -32,8 +32,11 @@ public class MQMessage implements Serializable {
     public void setTo(String to){
         head.setTo(to);
     }
-    public void setSendTime(){
-        head.setSendTime(new Date());
+
+    public void packMessage(String topic,String tags){
+        head.setTopic(topic);
+        head.setTags(tags);
+        head.setSendTime(DateUtil.getCurrentDate(DateUtil.DatePatten.PATTEN_TO_SECOND));
     }
 
 }

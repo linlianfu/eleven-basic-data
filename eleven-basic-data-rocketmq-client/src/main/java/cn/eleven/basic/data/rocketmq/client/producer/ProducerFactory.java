@@ -1,6 +1,7 @@
 package cn.eleven.basic.data.rocketmq.client.producer;
 
 import cn.eleven.basic.data.rocketmq.client.dto.MQMessage;
+import cn.eleven.common.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.alibaba.rocketmq.client.producer.SendResult;
@@ -48,13 +49,13 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
         producer.setNamesrvAddr(namesrvAddr);
         try {
             producer.start();
-            message.setSendTime();
+            message.packMessage(topic,tags);
             Message msg = new Message(topic,
                     tags,
                     JSONObject.toJSONString(message).getBytes());
             SendResult result = producer.send(msg);
             log.info("id【{}】,result【{}】，context【{}】",result.getMsgId(),result.getSendStatus(),new String(msg.getBody()));
-            log.info(">>>>>消息发送结束.....");
+            log.info(">>>>>[{}]消息发送结束", DateUtil.toString(message.getHead().getSendTime(), DateUtil.DatePatten.PATTEN_TO_SECOND));
             return result.getSendStatus();
         } catch (Exception e) {
             log.error("消息发送失败，异常：{}", ExceptionUtils.getStackTrace(e));
