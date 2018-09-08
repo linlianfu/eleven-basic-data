@@ -19,9 +19,9 @@
     <!--全局拦截输入的格式为fastJson格式-->
     <mvc:annotation-driven>
         <mvc:message-converters>
-            <bean class="priv.llf.commons.intercept.WriteFastJsonHttpMessageConverter"/>
+            <bean class="cn.eleven.common.intercept.WriteFastJsonHttpMessageConverter"/>
         </mvc:message-converters>
     </mvc:annotation-driven>
     <!--全局的异常拦截-->
-    <bean class="priv.llf.commons.intercept.WrappedHandlerExceptionResolver"/>
+    <bean class="cn.eleven.common.intercept.WrappedHandlerExceptionResolver"/>
 </beans>
