@@ -29,8 +29,8 @@ public class MqAction {
      * 测试消息生产
      * @return
      */
-    @GetMapping("produceMessage")
-    public SendStatus produceMessage(){
+    @GetMapping("sendMessageToPlatform")
+    public SendStatus sendMessageToPlatform(){
 
         UserBaseDto userBaseDto = new UserBaseDto();
         userBaseDto.setName("mq学习课程");
@@ -40,7 +40,8 @@ public class MqAction {
         MQMessage message = new MQMessage(userBaseDto.toString());
         message.setFrom("基础数据服务");
         message.setTo("计划发送给平台");
-        //发送给平台接受
+        //打上平台的tag，发送给平台接受
+        producerFactory.setTags("frame");
         return producerFactory.sendMessage(message);
     }
 

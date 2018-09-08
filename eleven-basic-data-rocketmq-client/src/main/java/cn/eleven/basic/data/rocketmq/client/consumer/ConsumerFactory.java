@@ -50,6 +50,7 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
         consumer.setNamesrvAddr(namesrvAddr);
         try {
             //订阅PushTopic下Tag为push的消息
+            log.info("消费者启动订阅关系，订阅topic:{}.subExpression:{}",topic,subExpression);
             consumer.subscribe(topic, subExpression);
             //程序第一次启动从消息队列头取数据
             consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);

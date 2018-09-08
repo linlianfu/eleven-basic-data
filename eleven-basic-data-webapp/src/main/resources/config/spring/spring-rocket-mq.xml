@@ -8,9 +8,11 @@
         <property name="namesrvAddr" value="127.0.0.1:9876"/>
         <property name="topic" value="ability-eleven-basic-data-send"/>
         <property name="producerGroup" value="ability-eleven-basic-data-group"/>
+        <property name="tags" value="frame"/>
     </bean>
     <bean id="consumerFactory" class="cn.eleven.basic.data.rocketmq.client.consumer.ConsumerFactory">
         <property name="namesrvAddr" value="127.0.0.1:9876"/>
         <property name="topic" value="ability-eleven-basic-data-send"/>
+        <property name="subExpression" value="ability"/>
     </bean>
 </beans>
