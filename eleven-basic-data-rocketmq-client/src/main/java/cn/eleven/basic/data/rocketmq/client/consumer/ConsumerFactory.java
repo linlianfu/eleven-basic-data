@@ -11,6 +11,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,9 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
     private String subExpression;
     @Setter
     private Map<String,List<String>> topicTagMap;
+    @Setter
+    private int retryTime =5;
+    private static Map<String,DefaultMQPushConsumer> consumerMap = new HashMap<>();
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -49,7 +53,7 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
 
         log.info(">>>>>基础数据服务启动消息消费监听。。。。。");
         log.info(">topicList:{}",topicTagMap);
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("PushConsumer");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerGroup);
         consumer.setNamesrvAddr(namesrvAddr);
         try {
             //订阅PushTopic下Tag为push的消息
@@ -59,6 +63,7 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
             consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
             consumer.registerMessageListener(getRegisterMessageListener());
             consumer.start();
+            consumerMap.put(topic,consumer);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,6 +78,9 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
             Message msg = msgs.get(0);
             log.info(">>>>>成功接收消息，来源topic:{},tags:{}",msg.getTopic(),msg.getTags());
             log.info("接收到的消息：【{}】",new String(msg.getBody()));
+            retryTime--;
+            if (retryTime >0)
+                return ConsumeConcurrentlyStatus.RECONSUME_LATER;
             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
         };
     }

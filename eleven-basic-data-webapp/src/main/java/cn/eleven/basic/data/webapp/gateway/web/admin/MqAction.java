@@ -41,7 +41,7 @@ public class MqAction {
         message.setFrom("基础数据服务");
         message.setTo("计划发送给平台");
         //打上平台的tag，发送给平台接受
-        producerFactory.setTags("frame");
+        producerFactory.setTags("ability");
         return producerFactory.sendMessage(message);
     }
 
