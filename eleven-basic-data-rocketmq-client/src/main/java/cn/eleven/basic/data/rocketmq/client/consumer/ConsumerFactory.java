@@ -39,7 +39,10 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
     @Setter
     private Map<String,List<String>> topicTagMap;
     @Setter
-    private int retryTime =5;
+    private int retryTime;
+
+    @Setter
+    private String consumerName;
     private static Map<String,DefaultMQPushConsumer> consumerMap = new HashMap<>();
 
     @Override
@@ -76,11 +79,9 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
     public MessageListenerConcurrently getRegisterMessageListener(){
         return (msgs, context) -> {
             Message msg = msgs.get(0);
+            log.info("消费者:{}",consumerName);
             log.info(">>>>>成功接收消息，来源topic:{},tags:{}",msg.getTopic(),msg.getTags());
             log.info("接收到的消息：【{}】",new String(msg.getBody()));
-            retryTime--;
-            if (retryTime >0)
-                return ConsumeConcurrentlyStatus.RECONSUME_LATER;
             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
         };
     }

@@ -54,8 +54,10 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
                     tags,
                     JSONObject.toJSONString(message).getBytes());
             SendResult result = producer.send(msg);
-            log.info("id【{}】,result【{}】，context【{}】",result.getMsgId(),result.getSendStatus(),new String(msg.getBody()));
-            log.info(">>>>>[{}]消息发送结束", DateUtil.toString(message.getHead().getSendTime(), DateUtil.DatePatten.PATTEN_TO_SECOND));
+            log.info("消息发送结束，时间：【{}】,id【{}】,result【{}】，context【{}】",
+                    DateUtil.toString(message.getHead().getSendTime(), DateUtil.DatePatten.PATTEN_TO_SECOND),
+                    result.getMsgId(),
+                    result.getSendStatus(),new String(msg.getBody()));
             return result.getSendStatus();
         } catch (Exception e) {
             log.error("消息发送失败，异常：{}", ExceptionUtils.getStackTrace(e));
