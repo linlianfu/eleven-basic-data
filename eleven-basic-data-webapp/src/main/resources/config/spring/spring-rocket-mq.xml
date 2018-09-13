@@ -10,31 +10,11 @@
         <property name="topic" value="ability-eleven-basic-data-send"/>
         <property name="tags" value="ability"/>
     </bean>
-    <bean id="producerFactory1" class="cn.eleven.basic.data.rocketmq.client.producer.ProducerFactory">
-        <property name="namesrvAddr" value="127.0.0.1:9876"/>
-        <property name="producerGroup" value="ability-eleven-basic-data-group"/>
-        <property name="topic" value="ability-eleven-basic-data-send"/>
-        <property name="tags" value="ability"/>
-    </bean>
     <bean id="consumerFactory" class="cn.eleven.basic.data.rocketmq.client.consumer.ConsumerFactory">
         <property name="namesrvAddr" value="127.0.0.1:9876"/>
         <property name="consumerGroup" value="ability-eleven-basic-data-group"/>
         <property name="topic" value="ability-eleven-basic-data-send"/>
         <property name="subExpression" value="ability"/>
-        <property name="consumerName" value="one"/>
-        <property name="topicTagMap">
-            <map>
-                <entry key="ability-eleven-basic-data-send" value="frame1"/>
-                <entry key="ability-eleven-basic-data-receive" value="ability"/>
-            </map>
-        </property>
-    </bean>
-    <bean id="consumerFactory2" class="cn.eleven.basic.data.rocketmq.client.consumer.ConsumerFactory">
-        <property name="namesrvAddr" value="127.0.0.1:9876"/>
-        <property name="consumerGroup" value="ability-eleven-basic-data-group"/>
-        <property name="topic" value="ability-eleven-basic-data-send"/>
-        <property name="subExpression" value="ability"/>
-        <property name="consumerName" value="second"/>
         <property name="topicTagMap">
             <map>
                 <entry key="ability-eleven-basic-data-send" value="frame1"/>

@@ -25,9 +25,6 @@ public class MqAction {
     @Resource(name = "producerFactory")
     ProducerFactory producerFactory;
 
-    @Resource(name = "producerFactory1")
-    ProducerFactory producerFactory1;
-
     /**
      * 测试消息生产
      * @return
@@ -43,7 +40,6 @@ public class MqAction {
         MQMessage message = new MQMessage(userBaseDto.toString());
         message.setFrom("基础数据服务");
         message.setTo("计划发送给平台");
-        producerFactory1.sendMessage(message);
         return producerFactory.sendMessage(message);
     }
 

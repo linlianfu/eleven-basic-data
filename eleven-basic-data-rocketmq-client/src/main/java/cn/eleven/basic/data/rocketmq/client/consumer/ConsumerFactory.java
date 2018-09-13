@@ -4,7 +4,7 @@ import com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer;
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import com.alibaba.rocketmq.common.consumer.ConsumeFromWhere;
-import com.alibaba.rocketmq.common.message.Message;
+import com.alibaba.rocketmq.common.message.MessageExt;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
@@ -38,11 +38,6 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
     private String subExpression;
     @Setter
     private Map<String,List<String>> topicTagMap;
-    @Setter
-    private int retryTime;
-
-    @Setter
-    private String consumerName;
     private static Map<String,DefaultMQPushConsumer> consumerMap = new HashMap<>();
 
     @Override
@@ -65,7 +60,10 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
             //程序第一次启动从消息队列头取数据
             consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
             consumer.registerMessageListener(getRegisterMessageListener());
+            //设置消费者最多重新消费次数
+            consumer.setMaxReconsumeTimes(0);
             consumer.start();
+            log.info("最大重新消费次数：{}",consumer.getMaxReconsumeTimes());
             consumerMap.put(topic,consumer);
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,11 +76,11 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
 
     public MessageListenerConcurrently getRegisterMessageListener(){
         return (msgs, context) -> {
-            Message msg = msgs.get(0);
-            log.info("消费者:{}",consumerName);
+            MessageExt msg = msgs.get(0);
             log.info(">>>>>成功接收消息，来源topic:{},tags:{}",msg.getTopic(),msg.getTags());
             log.info("接收到的消息：【{}】",new String(msg.getBody()));
-            return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+            log.info(">>>消费次数：{}",msg.getReconsumeTimes());
+            return ConsumeConcurrentlyStatus.RECONSUME_LATER;
         };
     }
 
