@@ -47,6 +47,8 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
         log.info(">>>>>开始发送消息,topic:【{}】,tags:【{}】",topic,tags);
         DefaultMQProducer producer = new DefaultMQProducer(producerGroup);
         producer.setNamesrvAddr(namesrvAddr);
+
+        producer.setRetryTimesWhenSendFailed(1);
         try {
             producer.start();
             message.packMessage(topic,tags);
