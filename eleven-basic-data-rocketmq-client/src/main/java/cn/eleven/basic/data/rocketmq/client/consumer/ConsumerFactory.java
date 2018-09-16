@@ -87,7 +87,8 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
             log.info("消息全部内容：{}",msg);
             try {
                 log.info("启动消费端延时10S");
-                TimeUnit.SECONDS.sleep(2);
+                TimeUnit.SECONDS.sleep(10);
+                log.info("key为：【{}】的消息消费完毕",msg.getKeys());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

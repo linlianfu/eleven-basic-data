@@ -74,25 +74,28 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
             Message msg = new Message(topic,
                     tags,
                     JSONObject.toJSONString(message).getBytes());
-            //设置消息key
-              msg.setKeys(message.getKey());
             //设置消息延时
             if (delayTimeLevel != 0){
                 msg.setDelayTimeLevel(delayTimeLevel);
             }
-            if (callback == null){
-                SendResult result =  producer.send(msg);
-                log.info("消息发送结束，时间：【{}】,id【{}】,result【{}】，context【{}】",
-                        message.getHead().getSendTime(),
-                        result.getMsgId(),
-                        result.getSendStatus(),new String(msg.getBody()));
-                return result.getSendStatus();
-            }else {
-                MessageExt ext = new MessageExt();
-               producer.send(msg,callback);
-               log.info(">>>异步消息发送完成");
-            }
+            SendResult result = null;
+            for (int i = 0; i <10; i++){
+                //设置消息key
+                msg.setKeys(i+"");
+                if (callback == null){
+                    result =  producer.send(msg);
+                    log.info("消息发送结束，时间：【{}】,id【{}】,result【{}】，context【{}】",
+                            message.getHead().getSendTime(),
+                            result.getMsgId(),
+                            result.getSendStatus(),new String(msg.getBody()));
 
+                }else {
+                    MessageExt ext = new MessageExt();
+                    producer.send(msg,callback);
+                    log.info(">>>异步消息发送完成");
+                }
+            }
+            return result.getSendStatus();
         } catch (Exception e) {
             log.error("消息发送失败，异常：{}", ExceptionUtils.getStackTrace(e));
         }finally{
