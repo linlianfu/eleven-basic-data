@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author: eleven
@@ -84,6 +85,12 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
             log.info("接收到的消息：【{}】",new String(msg.getBody()));
 //            log.info(">>>消费次数：{}",msg.getReconsumeTimes());
             log.info("消息全部内容：{}",msg);
+            try {
+                log.info("启动消费端延时10S");
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return ConsumeConcurrentlyStatus.RECONSUME_LATER;
         };
     }
