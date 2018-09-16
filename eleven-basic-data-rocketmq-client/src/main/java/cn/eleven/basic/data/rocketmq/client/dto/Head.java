@@ -3,7 +3,6 @@ package cn.eleven.basic.data.rocketmq.client.dto;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author: eleven
@@ -31,6 +30,6 @@ public class Head implements Serializable{
     /**
      * 发送时间
      */
-    private Date sendTime;
+    private String sendTime;
 
 }

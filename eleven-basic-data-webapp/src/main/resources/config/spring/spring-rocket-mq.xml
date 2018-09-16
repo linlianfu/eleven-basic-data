@@ -9,12 +9,6 @@
         <property name="producerGroup" value="ability-eleven-basic-data-group"/>
         <property name="topic" value="to-frame"/>
         <property name="tags" value="frame"/>
-        <property name="keys">
-            <list>
-                <value>basicKey</value>
-                <value>toFrame</value>
-            </list>
-        </property>
     </bean>
     <bean id="consumerFactory" class="cn.eleven.basic.data.rocketmq.client.consumer.ConsumerFactory">
         <property name="namesrvAddr" value="127.0.0.1:9876"/>

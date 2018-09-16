@@ -1,5 +1,6 @@
 package cn.eleven.basic.data.rocketmq.client.consumer;
 
+import cn.eleven.common.date.DateUtil;
 import com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer;
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently;
@@ -77,9 +78,11 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
     public MessageListenerConcurrently getRegisterMessageListener(){
         return (msgs, context) -> {
             MessageExt msg = msgs.get(0);
-            log.info(">>>>>成功接收消息，来源topic:{},tags:{}",msg.getTopic(),msg.getTags());
+            log.info(">>>>>【{}】成功接收消息，来源topic:{},tags:{}",
+                    DateUtil.getCurrentDate(DateUtil.DatePatten.PATTEN_TO_SECOND),
+                    msg.getTopic(),msg.getTags());
             log.info("接收到的消息：【{}】",new String(msg.getBody()));
-            log.info(">>>消费次数：{}",msg.getReconsumeTimes());
+//            log.info(">>>消费次数：{}",msg.getReconsumeTimes());
             log.info("消息全部内容：{}",msg);
             return ConsumeConcurrentlyStatus.RECONSUME_LATER;
         };

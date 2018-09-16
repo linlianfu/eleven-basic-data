@@ -21,6 +21,13 @@ public class MQMessage implements Serializable {
      */
     private String body;
 
+    /**
+     * 消息key，为方便业务查询定位具体消息，
+     * 通常将此key当作每条消息的唯一识别标志，配合rocketMQ控制台查询使用
+     * @param body
+     */
+    private String key;
+
     public MQMessage(String body){
         head = new Head();
         this.body = body;
@@ -36,7 +43,7 @@ public class MQMessage implements Serializable {
     public void packMessage(String topic,String tags){
         head.setTopic(topic);
         head.setTags(tags);
-        head.setSendTime(DateUtil.getCurrentDate(DateUtil.DatePatten.PATTEN_TO_SECOND));
+        head.setSendTime(DateUtil.getCurrentDateString(DateUtil.DatePatten.PATTEN_TO_SECOND));
     }
 
 }

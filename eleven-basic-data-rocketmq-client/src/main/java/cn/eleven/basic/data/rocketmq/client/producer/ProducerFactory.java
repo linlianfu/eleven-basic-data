@@ -1,7 +1,6 @@
 package cn.eleven.basic.data.rocketmq.client.producer;
 
 import cn.eleven.basic.data.rocketmq.client.dto.MQMessage;
-import cn.eleven.common.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.rocketmq.client.impl.CommunicationMode;
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
@@ -9,15 +8,14 @@ import com.alibaba.rocketmq.client.producer.SendCallback;
 import com.alibaba.rocketmq.client.producer.SendResult;
 import com.alibaba.rocketmq.client.producer.SendStatus;
 import com.alibaba.rocketmq.common.message.Message;
+import com.alibaba.rocketmq.common.message.MessageExt;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author: eleven
@@ -40,7 +38,7 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
     @Setter
     private String tags;
     @Setter
-    private List<String> keys;
+    private int delayTimeLevel;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -76,16 +74,21 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
             Message msg = new Message(topic,
                     tags,
                     JSONObject.toJSONString(message).getBytes());
-            if (CollectionUtils.isNotEmpty(keys))
-              msg.setKeys(keys);
+            //设置消息key
+              msg.setKeys(message.getKey());
+            //设置消息延时
+            if (delayTimeLevel != 0){
+                msg.setDelayTimeLevel(delayTimeLevel);
+            }
             if (callback == null){
                 SendResult result =  producer.send(msg);
                 log.info("消息发送结束，时间：【{}】,id【{}】,result【{}】，context【{}】",
-                        DateUtil.toString(message.getHead().getSendTime(), DateUtil.DatePatten.PATTEN_TO_SECOND),
+                        message.getHead().getSendTime(),
                         result.getMsgId(),
                         result.getSendStatus(),new String(msg.getBody()));
                 return result.getSendStatus();
             }else {
+                MessageExt ext = new MessageExt();
                producer.send(msg,callback);
                log.info(">>>异步消息发送完成");
             }
