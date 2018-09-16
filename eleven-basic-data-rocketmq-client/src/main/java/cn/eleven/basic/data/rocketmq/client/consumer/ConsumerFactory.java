@@ -80,6 +80,7 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
             log.info(">>>>>成功接收消息，来源topic:{},tags:{}",msg.getTopic(),msg.getTags());
             log.info("接收到的消息：【{}】",new String(msg.getBody()));
             log.info(">>>消费次数：{}",msg.getReconsumeTimes());
+            log.info("消息全部内容：{}",msg);
             return ConsumeConcurrentlyStatus.RECONSUME_LATER;
         };
     }

@@ -11,11 +11,13 @@ import com.alibaba.rocketmq.client.producer.SendStatus;
 import com.alibaba.rocketmq.common.message.Message;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author: eleven
@@ -37,6 +39,8 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
     private String topic;
     @Setter
     private String tags;
+    @Setter
+    private List<String> keys;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -72,7 +76,8 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
             Message msg = new Message(topic,
                     tags,
                     JSONObject.toJSONString(message).getBytes());
-            msg.setKeys("messageKey");
+            if (CollectionUtils.isNotEmpty(keys))
+              msg.setKeys(keys);
             if (callback == null){
                 SendResult result =  producer.send(msg);
                 log.info("消息发送结束，时间：【{}】,id【{}】,result【{}】，context【{}】",
