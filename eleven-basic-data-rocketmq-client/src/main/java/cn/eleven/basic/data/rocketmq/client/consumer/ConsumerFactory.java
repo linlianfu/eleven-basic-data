@@ -3,7 +3,9 @@ package cn.eleven.basic.data.rocketmq.client.consumer;
 import cn.eleven.common.date.DateUtil;
 import com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer;
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+import com.alibaba.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import com.alibaba.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import com.alibaba.rocketmq.common.consumer.ConsumeFromWhere;
 import com.alibaba.rocketmq.common.message.MessageExt;
 import lombok.Setter;
@@ -15,7 +17,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author: eleven
@@ -32,12 +33,30 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
      */
     @Setter
     private String namesrvAddr;
+    /**
+     * 消费集群
+     */
     @Setter
     private String consumerGroup;
+    /**
+     * 订阅topic
+     */
     @Setter
     private String topic;
+    /**
+     * 订阅的tag
+     */
     @Setter
     private String subExpression;
+    /**
+     * 订阅的tag是否是顺序消费
+     */
+    private boolean order;
+    /**
+     *一次消费拉取的消息条数，默认情况是1条
+     */
+    @Setter
+    private int consumeMessageBatchMaxSize = 1;
     @Setter
     private Map<String,List<String>> topicTagMap;
     private static Map<String,DefaultMQPushConsumer> consumerMap = new HashMap<>();
@@ -61,11 +80,13 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
             consumer.subscribe(topic, subExpression);
             //程序第一次启动从消息队列头取数据
             consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-            consumer.registerMessageListener(getRegisterMessageListener());
+            //设置一次消费几条消息
+            consumer.setConsumeMessageBatchMaxSize(consumeMessageBatchMaxSize);
             //设置消费者最多重新消费次数
-            consumer.setMaxReconsumeTimes(0);
+//            consumer.setMaxReconsumeTimes(5);
+//            log.info("最大重新消费次数：{}",consumer.getMaxReconsumeTimes());
+            consumer.registerMessageListener(registerConcurrentlyMessageListener());
             consumer.start();
-            log.info("最大重新消费次数：{}",consumer.getMaxReconsumeTimes());
             consumerMap.put(topic,consumer);
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,25 +95,35 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
     }
 
 
-
-    private MessageListenerConcurrently getRegisterMessageListener(){
+    /**
+     * 注册普通消费监听
+     * @return
+     */
+    private MessageListenerConcurrently registerConcurrentlyMessageListener(){
         return (msgs, context) -> {
             MessageExt msg = msgs.get(0);
             log.info(">>>>>【{}】成功接收消息，来源topic:{},tags:{}",
                     DateUtil.getCurrentDateString(DateUtil.DatePatten.PATTEN_TO_SECOND),
                     msg.getTopic(),msg.getTags());
-            log.info("接收到的消息：【{}】",new String(msg.getBody()));
-//            log.info(">>>消费次数：{}",msg.getReconsumeTimes());
-            log.info("消息全部内容：{}",msg);
-            try {
-                log.info("启动消费端延时10S");
-                TimeUnit.SECONDS.sleep(10);
-                log.info("key为：【{}】的消息消费完毕",msg.getKeys());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return ConsumeConcurrentlyStatus.RECONSUME_LATER;
+            log.info("此次消费拉去消息数目：{}条",msgs.size());
+            log.info("消息队列：{}，消息key:{},消息体：【{}】",msg.getQueueId(),msg.getKeys(),new String(msg.getBody()));
+            return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
         };
+    }
+
+    /**
+     * 注册顺序消费监听
+     * @return
+     */
+    private MessageListenerOrderly registerOrderMessageListener(){
+      return (msgs, context) -> {
+          MessageExt msg = msgs.get(0);
+          log.info(">>>>>【{}】成功接收消息，来源topic:{},tags:{}",
+                  DateUtil.getCurrentDateString(DateUtil.DatePatten.PATTEN_TO_SECOND),
+                  msg.getTopic(),msg.getTags());
+          log.info("消息队列：{}，消息key:{},消息体：【{}】",msg.getQueueId(),msg.getKeys(),new String(msg.getBody()));
+          return ConsumeOrderlyStatus.SUCCESS;
+      };
     }
 
     @Override
