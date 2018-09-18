@@ -95,7 +95,7 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
                     log.info(">>>异步消息发送完成");
                 }
             }
-            return result.getSendStatus();
+            return result == null ? null : result.getSendStatus();
         } catch (Exception e) {
             log.error("消息发送失败，异常：{}", ExceptionUtils.getStackTrace(e));
         }finally{

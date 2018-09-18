@@ -49,7 +49,7 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
     }
 
 
-    public boolean startMessageListener(){
+    private void startMessageListener(){
 
         log.info(">>>>>基础数据服务启动消息消费监听。。。。。");
         log.info(">topicList:{}",topicTagMap);
@@ -71,12 +71,11 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
             e.printStackTrace();
         }
 
-        return true;
     }
 
 
 
-    public MessageListenerConcurrently getRegisterMessageListener(){
+    private MessageListenerConcurrently getRegisterMessageListener(){
         return (msgs, context) -> {
             MessageExt msg = msgs.get(0);
             log.info(">>>>>【{}】成功接收消息，来源topic:{},tags:{}",
