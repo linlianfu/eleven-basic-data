@@ -22,4 +22,11 @@
             </map>
         </property>
     </bean>
+    <!--如果需要模拟多个消费者，可将如下消费者开启-->
+    <!--<bean id="consumerFactory1" class="cn.eleven.basic.data.rocketmq.client.consumer.ConsumerFactory">-->
+        <!--<property name="namesrvAddr" value="127.0.0.1:9876"/>-->
+        <!--<property name="consumerGroup" value="frame-group"/>-->
+        <!--<property name="topic" value="to-frame"/>-->
+        <!--<property name="subExpression" value="frame"/>-->
+    <!--</bean>-->
 </beans>

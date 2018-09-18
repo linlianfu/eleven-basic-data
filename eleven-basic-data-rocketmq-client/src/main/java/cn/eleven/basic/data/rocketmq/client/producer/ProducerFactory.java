@@ -79,7 +79,7 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
                 msg.setDelayTimeLevel(delayTimeLevel);
             }
             SendResult result = null;
-            for (int i = 0; i <10; i++){
+            for (int i = 0; i <20; i++){
                 //设置消息key
                 msg.setKeys(i+"");
                 if (callback == null){
