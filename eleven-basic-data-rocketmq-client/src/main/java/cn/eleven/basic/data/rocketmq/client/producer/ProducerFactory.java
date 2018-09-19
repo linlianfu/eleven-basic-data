@@ -67,6 +67,7 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
     private SendStatus send(MQMessage message, SendCallback callback){
         log.info(">>>>>开始发送消息,topic:【{}】,tags:【{}】",topic,tags);
         DefaultMQProducer producer = new DefaultMQProducer(producerGroup);
+        producer.setDefaultTopicQueueNums(1);
         producer.setNamesrvAddr(namesrvAddr);
         try {
             producer.start();
@@ -79,15 +80,15 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
                 msg.setDelayTimeLevel(delayTimeLevel);
             }
             SendResult result = null;
-            for (int i = 0; i <20; i++){
+            for (int i = 0; i <30; i++){
                 //设置消息key
                 msg.setKeys(i+"");
                 if (callback == null){
                     result =  producer.send(msg);
-                    log.info("消息发送结束，时间：【{}】,id【{}】,result【{}】，context【{}】",
-                            message.getHead().getSendTime(),
-                            result.getMsgId(),
-                            result.getSendStatus(),new String(msg.getBody()));
+//                    log.info("消息发送结束，时间：【{}】,id【{}】,result【{}】，context【{}】",
+//                            message.getHead().getSendTime(),
+//                            result.getMsgId(),
+//                            result.getSendStatus(),new String(msg.getBody()));
 
                 }else {
                     MessageExt ext = new MessageExt();

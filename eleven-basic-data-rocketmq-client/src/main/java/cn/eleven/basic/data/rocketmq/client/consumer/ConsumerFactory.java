@@ -1,6 +1,5 @@
 package cn.eleven.basic.data.rocketmq.client.consumer;
 
-import cn.eleven.common.date.DateUtil;
 import com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer;
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
@@ -51,6 +50,7 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
     /**
      * 订阅的tag是否是顺序消费
      */
+    @Setter
     private boolean order;
     /**
      *一次消费拉取的消息条数，默认情况是1条
@@ -85,7 +85,11 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
             //设置消费者最多重新消费次数
 //            consumer.setMaxReconsumeTimes(5);
 //            log.info("最大重新消费次数：{}",consumer.getMaxReconsumeTimes());
-            consumer.registerMessageListener(registerConcurrentlyMessageListener());
+            if (order){
+                consumer.registerMessageListener(registerOrderMessageListener());
+            }else {
+                consumer.registerMessageListener(registerConcurrentlyMessageListener());
+            }
             consumer.start();
             consumerMap.put(topic,consumer);
         } catch (Exception e) {
@@ -102,10 +106,10 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
     private MessageListenerConcurrently registerConcurrentlyMessageListener(){
         return (msgs, context) -> {
             MessageExt msg = msgs.get(0);
-            log.info(">>>>>【{}】成功接收消息，来源topic:{},tags:{}",
-                    DateUtil.getCurrentDateString(DateUtil.DatePatten.PATTEN_TO_SECOND),
-                    msg.getTopic(),msg.getTags());
-            log.info("此次消费拉去消息数目：{}条",msgs.size());
+//            log.info(">>>>>【{}】成功接收消息，来源topic:{},tags:{}",
+//                    DateUtil.getCurrentDateString(DateUtil.DatePatten.PATTEN_TO_SECOND),
+//                    msg.getTopic(),msg.getTags());
+//            log.info("此次消费拉去消息数目：{}条",msgs.size());
             log.info("消息队列：{}，消息key:{},消息体：【{}】",msg.getQueueId(),msg.getKeys(),new String(msg.getBody()));
             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
         };
@@ -118,9 +122,9 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
     private MessageListenerOrderly registerOrderMessageListener(){
       return (msgs, context) -> {
           MessageExt msg = msgs.get(0);
-          log.info(">>>>>【{}】成功接收消息，来源topic:{},tags:{}",
-                  DateUtil.getCurrentDateString(DateUtil.DatePatten.PATTEN_TO_SECOND),
-                  msg.getTopic(),msg.getTags());
+//          log.info(">>>>>【{}】成功接收消息，来源topic:{},tags:{}",
+//                  DateUtil.getCurrentDateString(DateUtil.DatePatten.PATTEN_TO_SECOND),
+//                  msg.getTopic(),msg.getTags());
           log.info("消息队列：{}，消息key:{},消息体：【{}】",msg.getQueueId(),msg.getKeys(),new String(msg.getBody()));
           return ConsumeOrderlyStatus.SUCCESS;
       };
