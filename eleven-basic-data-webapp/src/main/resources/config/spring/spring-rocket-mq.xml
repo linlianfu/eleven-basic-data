@@ -28,6 +28,6 @@
         <property name="consumerGroup" value="frame-group"/>
         <property name="topic" value="to-frame"/>
         <property name="subExpression" value="frame"/>
-        <property name="order" value="false"/>
+        <property name="order" value="true"/>
     </bean>
 </beans>

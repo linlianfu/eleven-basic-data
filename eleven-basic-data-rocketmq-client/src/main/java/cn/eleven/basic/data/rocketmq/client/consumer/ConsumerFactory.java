@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author: eleven
@@ -110,7 +111,13 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
 //                    DateUtil.getCurrentDateString(DateUtil.DatePatten.PATTEN_TO_SECOND),
 //                    msg.getTopic(),msg.getTags());
 //            log.info("此次消费拉去消息数目：{}条",msgs.size());
-            log.info("消息队列：{}，消息key:{},消息体：【{}】",msg.getQueueId(),msg.getKeys(),new String(msg.getBody()));
+            log.info("Concurrently:消息队列：{}，消息key:{},消息体：【{}】",msg.getQueueId(),msg.getKeys(),new String(msg.getBody()));
+            try {
+                TimeUnit.SECONDS.sleep(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+//            log.info("队列：{}，消息key:{}消费完成",msg.getQueueId(),msg.getKeys());
             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
         };
     }
@@ -125,7 +132,7 @@ public class ConsumerFactory implements Serializable,DisposableBean,Initializing
 //          log.info(">>>>>【{}】成功接收消息，来源topic:{},tags:{}",
 //                  DateUtil.getCurrentDateString(DateUtil.DatePatten.PATTEN_TO_SECOND),
 //                  msg.getTopic(),msg.getTags());
-          log.info("消息队列：{}，消息key:{},消息体：【{}】",msg.getQueueId(),msg.getKeys(),new String(msg.getBody()));
+          log.info("Order:消息队列：{}，消息key:{},消息体：【{}】",msg.getQueueId(),msg.getKeys(),new String(msg.getBody()));
           return ConsumeOrderlyStatus.SUCCESS;
       };
     }

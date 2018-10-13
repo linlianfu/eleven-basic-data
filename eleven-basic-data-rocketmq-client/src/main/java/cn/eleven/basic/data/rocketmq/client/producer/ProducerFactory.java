@@ -67,7 +67,7 @@ public class ProducerFactory implements DisposableBean,InitializingBean ,Seriali
     private SendStatus send(MQMessage message, SendCallback callback){
         log.info(">>>>>开始发送消息,topic:【{}】,tags:【{}】",topic,tags);
         DefaultMQProducer producer = new DefaultMQProducer(producerGroup);
-        producer.setDefaultTopicQueueNums(1);
+        producer.setDefaultTopicQueueNums(2);
         producer.setNamesrvAddr(namesrvAddr);
         try {
             producer.start();
