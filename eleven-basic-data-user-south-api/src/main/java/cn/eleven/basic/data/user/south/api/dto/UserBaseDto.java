@@ -3,6 +3,7 @@ package cn.eleven.basic.data.user.south.api.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @description:
  */
 @Data
+@Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserBaseDto implements Serializable{
@@ -31,4 +33,8 @@ public class UserBaseDto implements Serializable{
      * 联系电话
      */
     private String phone;
+    /**
+     * 地区
+     */
+    private String region;
 }
